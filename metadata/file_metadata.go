@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -30,6 +32,24 @@ func (dt DocumentType) String() string {
 	panic(fmt.Sprintf("Unknown document type: %v", int(dt)))
 }
 
+func (dt *DocumentType) UnmarshalJSON(data []byte) error {
+	testStr := strings.Trim(string(data), "\"")
+	switch string(testStr) {
+	case "CollectionType":
+		*dt = DocumentTypeCollection
+	case "DocumentType":
+		*dt = DocumentTypeDocument
+	default:
+		return fmt.Errorf("Unknown document type: [%s]", testStr)
+	}
+
+	return nil
+}
+
+func (dt DocumentType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(dt.String())
+}
+
 type FileMetadata struct {
 	// VisibleName is the name of the file in the user interface
 	VisibleName string `json:"visibleName"`
@@ -52,10 +72,22 @@ type FileMetadata struct {
 	Deleted bool         `json:"deleted"`
 }
 
+func NewMetadataForFile(fileName string) FileMetadata {
+	return FileMetadata{
+		LastModified:   fmt.Sprintf("%d", time.Now().UnixMilli()),
+		LastOpened:     fmt.Sprintf("%d", time.Now().UnixMilli()),
+		LastOpenedPage: 0,
+		Parent:         "",
+		Pinned:         false,
+		Type:           DocumentTypeDocument,
+		VisibleName:    fileName,
+	}
+}
+
 func FromFilename(fileName string) (FileMetadata, error) {
 	var metadata FileMetadata
 
-	metadataFile, err := os.Open(fileName)
+	metadataFile, err := os.Open(MetadataDir + fileName)
 	if err != nil {
 		return metadata, err
 	}
@@ -80,7 +112,7 @@ func FromUUID(id *uuid.UUID) (FileMetadata, error) {
 // `FromName` returns a list of all the documents that have the same name
 // as `visibleName`
 func FromName(visibleName string) ([]FileMetadata, error) {
-	metaFiles, uuids, err := listMetadataFiles()
+	metaFiles, err := ListMetadataFiles()
 	if err != nil {
 		return nil, err
 	}
