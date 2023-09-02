@@ -12,22 +12,15 @@ import (
 	"nicholasnovak.io/retort/metadata"
 )
 
-// From https://github.com/cherti/remarkable-cli-tooling/blob/main/resync.py#L121
-
-var (
-	dryRun bool
-)
-
 func main() {
 	rootCmd := &cobra.Command{
 		Use: "retort",
 	}
 
-	UploadFileCommand.Flags().BoolVar(&dryRun, "dry-run", true, "Enables or disables writing changes to disk")
-
 	rootCmd.AddCommand(ListFilesCommand)
 	rootCmd.AddCommand(UploadFileCommand)
 	rootCmd.AddCommand(SearchByHashCommand)
+	rootCmd.AddCommand(ReceiveFilesCommand)
 
 	if err := rootCmd.Execute(); err != nil {
 		panic(err)
@@ -59,7 +52,7 @@ var ListFilesCommand = &cobra.Command{
 var UploadFileCommand = &cobra.Command{
 	Use: "upload",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return metadata.UploadFile(args[0], !dryRun)
+		return metadata.UploadFile(args[0])
 	},
 }
 
