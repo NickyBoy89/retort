@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	MetadataDir = ".local/share/remarkable/xochitl/"
+	MetadataDir = "/home/root/.local/share/remarkable/xochitl/"
 )
 
 type DocumentType byte
