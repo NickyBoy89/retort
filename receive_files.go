@@ -38,6 +38,9 @@ var ReceiveFilesCommand = &cobra.Command{
 				}
 
 				log.Info("Done")
+				if err := client.DeleteWaitingFile(context.Background(), file.Name); err != nil {
+					return err
+				}
 
 				fileBuf.Close()
 			}
