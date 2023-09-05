@@ -1,4 +1,4 @@
-package metadata
+package device
 
 import (
 	"encoding/json"
@@ -7,35 +7,12 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 
 	log "github.com/sirupsen/logrus"
+	"nicholasnovak.io/retort/metadata"
 
 	"github.com/google/uuid"
 )
-
-// ListMetadataFiles looks in the device and returns a list of all the
-// file names for the metadata files
-func ListMetadataFiles() ([]string, error) {
-	entries, err := os.ReadDir(MetadataDir)
-	if err != nil {
-		return nil, err
-	}
-
-	fileNames := []string{}
-
-	for _, entry := range entries {
-		if entry.IsDir() {
-			continue
-		}
-
-		if strings.HasSuffix(entry.Name(), ".metadata") {
-			fileNames = append(fileNames, entry.Name())
-		}
-	}
-
-	return fileNames, nil
-}
 
 // createSupplimentalFiles is an internal function that creates all of the
 // necessary files for uploading a file to the reMarkable device
@@ -46,9 +23,9 @@ func ListMetadataFiles() ([]string, error) {
 // well as the metadate for that file
 func createSupplimentalFiles(fileUUID uuid.UUID) error {
 	fileId := fileUUID.String()
-	destFolder := filepath.Join(MetadataDir, fileId)
-	thumbnailFolder := filepath.Join(MetadataDir, fileId+".thumbnails")
-	contentFile := filepath.Join(MetadataDir, fileId+".content")
+	destFolder := filepath.Join(metadata.MetadataDir, fileId)
+	thumbnailFolder := filepath.Join(metadata.MetadataDir, fileId+".thumbnails")
+	contentFile := filepath.Join(metadata.MetadataDir, fileId+".content")
 
 	// Create a folder
 	log.Debugf("Creating new file directory at %s", destFolder)
@@ -91,11 +68,11 @@ func UploadFileBuffer(fileName string, fileBuffer io.Reader) error {
 		createSupplimentalFiles(fileId)
 
 		// Now, we only need to handle the upload of the final file, and the metadata
-		metadataFile := filepath.Join(MetadataDir, fileId.String()+".metadata")
-		outputFile := filepath.Join(MetadataDir, fileId.String()+filepath.Ext(fileName))
+		metadataFile := filepath.Join(metadata.MetadataDir, fileId.String()+".metadata")
+		outputFile := filepath.Join(metadata.MetadataDir, fileId.String()+filepath.Ext(fileName))
 
 		// Upload the relevant metadata file
-		metadata := NewMetadataForFile(fileName)
+		metadata := metadata.NewMetadataForFile(fileName)
 
 		outputMetadata, err := os.OpenFile(metadataFile, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
 		if err != nil {

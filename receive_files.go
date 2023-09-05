@@ -5,7 +5,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"nicholasnovak.io/retort/metadata"
+	"nicholasnovak.io/retort/device"
 	"tailscale.com/client/tailscale"
 )
 
@@ -33,7 +33,7 @@ var ReceiveFilesCommand = &cobra.Command{
 				}
 
 				log.Info("Uploading to device")
-				if err := metadata.UploadFileBuffer(file.Name, fileBuf); err != nil {
+				if err := device.UploadFileBuffer(file.Name, fileBuf); err != nil {
 					return err
 				}
 

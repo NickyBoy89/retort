@@ -9,6 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
+	"nicholasnovak.io/retort/device"
 	"nicholasnovak.io/retort/metadata"
 )
 
@@ -52,7 +53,7 @@ var ListFilesCommand = &cobra.Command{
 var UploadFileCommand = &cobra.Command{
 	Use: "upload",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return metadata.UploadFile(args[0])
+		return device.UploadFile(args[0])
 	},
 }
 
