@@ -59,7 +59,7 @@ func ReloadFiles() error {
 // Detection of the file's type is done through specifying the file's name
 func UploadFileBuffer(fileName string, fileBuffer io.Reader) error {
 	switch filepath.Ext(fileName) {
-	case ".pdf":
+	case ".pdf", ".epub":
 		// To upload a file, we need to complete several steps:
 
 		fileId := uuid.New()
