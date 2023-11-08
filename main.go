@@ -8,8 +8,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	"github.com/NickyBoy89/retort/metadata"
 	"github.com/spf13/cobra"
-	"nicholasnovak.io/retort/metadata"
 )
 
 func main() {

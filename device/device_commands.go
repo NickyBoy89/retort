@@ -8,8 +8,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/NickyBoy89/retort/metadata"
 	log "github.com/sirupsen/logrus"
-	"nicholasnovak.io/retort/metadata"
 
 	"github.com/google/uuid"
 )

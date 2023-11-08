@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 
+	"github.com/NickyBoy89/retort/device"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"nicholasnovak.io/retort/device"
 	"tailscale.com/client/tailscale"
 )
 

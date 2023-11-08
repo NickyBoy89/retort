@@ -1,6 +1,6 @@
 package device
 
-import "nicholasnovak.io/retort/metadata"
+import "github.com/NickyBoy89/retort/metadata"
 
 // FileWithNameExists tests for the existence of a file with the same name on
 // the device

@@ -1,4 +1,4 @@
-module nicholasnovak.io/retort
+module github.com/NickyBoy89/retort
 
 go 1.21.0
 
