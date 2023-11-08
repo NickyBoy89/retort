@@ -35,7 +35,7 @@ var ReceiveFilesCommand = &cobra.Command{
 
 				log.Info("Uploading to device")
 				if err := device.UploadFileBuffer(file.Name, fileBuf); err != nil {
-					return err
+					log.Errorf("Uploading file to device failed with error: %v", err)
 				}
 
 				log.Info("Done")
