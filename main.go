@@ -9,7 +9,6 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
-	"nicholasnovak.io/retort/device"
 	"nicholasnovak.io/retort/metadata"
 )
 
@@ -19,7 +18,6 @@ func main() {
 	}
 
 	rootCmd.AddCommand(ListFilesCommand)
-	rootCmd.AddCommand(UploadFileCommand)
 	rootCmd.AddCommand(SearchByHashCommand)
 	rootCmd.AddCommand(ReceiveFilesCommand)
 
@@ -29,7 +27,8 @@ func main() {
 }
 
 var ListFilesCommand = &cobra.Command{
-	Use: "status",
+	Use:   "status",
+	Short: "Lists all the files on the device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fileNames, err := metadata.ListMetadataFiles()
 		if err != nil {
@@ -50,16 +49,10 @@ var ListFilesCommand = &cobra.Command{
 	},
 }
 
-var UploadFileCommand = &cobra.Command{
-	Use: "upload",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		return device.UploadFile(args[0])
-	},
-}
-
 var SearchByHashCommand = &cobra.Command{
-	Use:  "hash-search",
-	Args: cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
+	Use:   "hash-search <input-file>",
+	Short: "Takes in an input file, and tests if any other files on the device match the hash of the input file",
+	Args:  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		originalFile, err := os.ReadFile(args[0])
 		if err != nil {

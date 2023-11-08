@@ -10,7 +10,8 @@ import (
 )
 
 var ReceiveFilesCommand = &cobra.Command{
-	Use: "receive-files",
+	Use:   "receive-files",
+	Short: "Listens for taildrop files, and uploads them to the device",
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		var client tailscale.LocalClient
