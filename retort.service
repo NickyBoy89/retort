@@ -1,0 +1,12 @@
+[Unit]
+Description=Receive files from Taildrop through Retort
+Wants=network-pre.target
+After=tailscaled.service
+
+[Service]
+ExecStart=/usr/sbin/retort receive-files
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
