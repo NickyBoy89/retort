@@ -54,10 +54,10 @@ func ReloadFiles() error {
 	return exec.Command("systemctl", "restart", "xochitl").Run()
 }
 
-// UploadFileBuffer uploads a file, given by its buffer, to the reMarkable device
+// ReceiveFileBuffer takes in a file, given by its buffer, to the reMarkable device
 //
 // Detection of the file's type is done through specifying the file's name
-func UploadFileBuffer(fileName string, fileBuffer io.Reader) error {
+func ReceiveFileBuffer(fileName string, fileBuffer io.Reader) error {
 	switch filepath.Ext(fileName) {
 	case ".pdf", ".epub":
 		// To upload a file, we need to complete several steps:
@@ -105,14 +105,4 @@ func UploadFileBuffer(fileName string, fileBuffer io.Reader) error {
 	}
 
 	return nil
-}
-
-func UploadFile(fileName string) error {
-	fileBuffer, err := os.Open(fileName)
-	if err != nil {
-		return err
-	}
-	defer fileBuffer.Close()
-
-	return UploadFileBuffer(fileName, fileBuffer)
 }
