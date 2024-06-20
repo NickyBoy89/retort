@@ -34,7 +34,7 @@ var ReceiveFilesCommand = &cobra.Command{
 				}
 
 				log.Info("Uploading to device")
-				if err := device.ReceiveFileBuffer(file.Name, fileBuf); err != nil {
+				if err := device.ReceiveFileBuffer(file.Name, fileBuf, false); err != nil {
 					log.Errorf("Uploading file to device failed with error: %v", err)
 				}
 
@@ -44,6 +44,11 @@ var ReceiveFilesCommand = &cobra.Command{
 				}
 
 				fileBuf.Close()
+			}
+
+			// After the files are uploaded, refresh the device
+			if err := device.ReloadFiles(); err != nil {
+				log.Fatalf("Failed to refresh indexes with error: %v\n", err)
 			}
 		}
 	},

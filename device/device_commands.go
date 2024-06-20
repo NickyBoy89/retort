@@ -56,8 +56,13 @@ func ReloadFiles() error {
 
 // ReceiveFileBuffer takes in a file, given by its buffer, to the reMarkable device
 //
-// Detection of the file's type is done through specifying the file's name
-func ReceiveFileBuffer(fileName string, fileBuffer io.Reader) error {
+// # Detection of the file's type is done through specifying the file's name
+//
+// This function also takes an optional refresh argument that determines if the
+// device should be refreshed once the file is uploaded. This needs to be done
+// before the file can be used, but refreshing too fast can cause the device
+// to reset
+func ReceiveFileBuffer(fileName string, fileBuffer io.Reader, shouldRefresh bool) error {
 	switch filepath.Ext(fileName) {
 	case ".pdf", ".epub":
 		// To upload a file, we need to complete several steps:
@@ -97,8 +102,10 @@ func ReceiveFileBuffer(fileName string, fileBuffer io.Reader) error {
 			return err
 		}
 
-		if err := ReloadFiles(); err != nil {
-			return err
+		if shouldRefresh {
+			if err := ReloadFiles(); err != nil {
+				return err
+			}
 		}
 	default:
 		return fmt.Errorf("Unknown file type to upload: %s", fileName)
