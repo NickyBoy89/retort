@@ -14,14 +14,14 @@ import (
 	"github.com/google/uuid"
 )
 
-// createSupplimentalFiles is an internal function that creates all of the
+// createSupplementalFiles is an internal function that creates all of the
 // necessary files for uploading a file to the reMarkable device
 //
 // `fileId` should be the UUID of the file being uploaded
 //
 // The final upload of the actual data file needs to be handled separately, as
 // well as the metadate for that file
-func createSupplimentalFiles(fileUUID uuid.UUID) error {
+func createSupplementalFiles(fileUUID uuid.UUID) error {
 	fileId := fileUUID.String()
 	destFolder := filepath.Join(metadata.MetadataDir, fileId)
 	thumbnailFolder := filepath.Join(metadata.MetadataDir, fileId+".thumbnails")
@@ -69,8 +69,8 @@ func ReceiveFileBuffer(fileName string, fileBuffer io.Reader, shouldRefresh bool
 
 		fileId := uuid.New()
 
-		// Create the supplimentary files
-		createSupplimentalFiles(fileId)
+		// Create the supplementary files
+		createSupplementalFiles(fileId)
 
 		// Now, we only need to handle the upload of the final file, and the metadata
 		metadataFile := filepath.Join(metadata.MetadataDir, fileId.String()+".metadata")
